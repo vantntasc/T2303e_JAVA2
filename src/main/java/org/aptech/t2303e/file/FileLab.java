@@ -2,10 +2,7 @@ package org.aptech.t2303e.file;
 
 import org.aptech.t2303e.lombok.Student;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.*;
 import java.rmi.ServerError;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -16,11 +13,11 @@ public class FileLab {
     private static final DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
     private static final String header = "ID|Name|Address|BirthDay";
     public static void main(String[] args) {
-        readFile();
+    createFileDemo();
     }
     public static void lab1(){
-//        File file = new File("F:/aptech/t2303e/T2303e-java2/etc/Demo1.txt");  // absolute path
-        File file = new File("./etc/Demo.txt"); // relative path
+        File file = new File("F:/aptech/t2303e/T2303e-java2/etc/Demo1.txt");  // absolute path
+//        File file = new File("./etc/Demo.txt"); // relative path
         System.err.println("File exists : "+ file.exists());
         if(file.isFile()){
             // có phải 1 thư mục hay ko
@@ -77,5 +74,19 @@ public class FileLab {
         }
         students.forEach(System.err::println);
     }
+    static void createFileDemo(){
+        try {
+            PrintWriter out  = new PrintWriter(new BufferedWriter(
+                    new FileWriter("./etc/demo1.txt",true)
+            ));
+            out.println("Demo");
+            out.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+
+
 
 }

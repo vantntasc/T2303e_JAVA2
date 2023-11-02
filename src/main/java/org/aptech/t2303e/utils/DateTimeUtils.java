@@ -15,4 +15,11 @@ public class DateTimeUtils {
         return calendar2.get(Calendar.YEAR)
                 - calendar1.get(Calendar.YEAR) + 1;
     }
+
+    public static String randomDateOfBirth(){
+        int year  = NumberUtils.randomNumber(1900, 2007);
+        int month  = NumberUtils.randomNumber(1,12);
+        int day =  NumberUtils.randomNumber(1,28);
+        return year+"-"+NumberUtils.converNum(month)+"-"+NumberUtils.converNum(day);
+    }
 }
