@@ -69,6 +69,12 @@ public class UserDaoImpl implements UserDao {
         return null;
     }
 
+    public static void main(String[] args) {
+        UserDaoImpl obj  = new UserDaoImpl();
+        User u =  obj.getByUsername("Demo1");
+        System.err.println(u);
+    }
+
     private  static User rowMapper(ResultSet rs){
         User u = null;
         int id  = 0;
@@ -80,8 +86,8 @@ public class UserDaoImpl implements UserDao {
             int status  = rs.getInt("status");
             String createdBy = rs.getString("created_by");
             String updatedBy = rs.getString("updated_by");
-            Date createdTime = rs.getDate("created_time");
-            Date updatedTime = rs.getDate("updated_time");
+            Date createdTime = rs.getDate("created_at");
+            Date updatedTime = rs.getDate("updated_at");
             u = User.builder()
                     .id(id)
                     .username(username)
