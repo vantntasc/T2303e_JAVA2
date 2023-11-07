@@ -11,6 +11,10 @@ public class UserServiceImpl implements UserService {
     public boolean login(String username, String password) {
         if(StringUtils.isEmpty(username) || StringUtils.isEmpty(password))
             return false;
-        return userRepo.validateUser(username,password);
+        // get user by username (username unique)
+        // tính từ lần đăng nhập mới nhất , tối đa 5 lần đăng nhập thất bại
+        // bổ sung trường login_fail , status (active , inactive)
+        // compare password -> true : login ok / not ok
+        return false;
     }
 }
