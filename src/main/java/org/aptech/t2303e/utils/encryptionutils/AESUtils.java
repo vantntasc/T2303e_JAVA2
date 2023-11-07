@@ -18,39 +18,39 @@ public class AESUtils {
     private static final String secretKey  = "eerterterte545t43tedrdgd";
     private static final String salt = "33wre353";
 
+//    public static String encrypt(String strToEncrypt) {
+//
+//        try {
+//
+//            SecureRandom secureRandom = new SecureRandom();
+//            byte[] iv = new byte[16];
+//            secureRandom.nextBytes(iv);
+//            IvParameterSpec ivspec = new IvParameterSpec(iv);
+//
+//            SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256");
+//            KeySpec spec = new PBEKeySpec(secretKey.toCharArray(), salt.getBytes(), ITERATION_COUNT, KEY_LENGTH);
+//            SecretKey tmp = factory.generateSecret(spec);
+//            SecretKeySpec secretKeySpec = new SecretKeySpec(tmp.getEncoded(), "AES");
+//
+//            Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
+//            cipher.init(Cipher.ENCRYPT_MODE, secretKeySpec, ivspec);
+//
+//            byte[] cipherText = cipher.doFinal(strToEncrypt.getBytes("UTF-8"));
+//            byte[] encryptedData = new byte[iv.length + cipherText.length];
+//            System.arraycopy(iv, 0, encryptedData, 0, iv.length);
+//            System.arraycopy(cipherText, 0, encryptedData, iv.length, cipherText.length);
+//
+//            return Base64.getEncoder().encodeToString(encryptedData);
+//        } catch (Exception e) {
+//            // Handle the exception properly
+//            e.printStackTrace();
+//            return null;
+//        }
+//    }
     public static String encrypt(String strToEncrypt) {
-
-        try {
-
-            SecureRandom secureRandom = new SecureRandom();
-            byte[] iv = new byte[16];
-            secureRandom.nextBytes(iv);
-            IvParameterSpec ivspec = new IvParameterSpec(iv);
-
-            SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256");
-            KeySpec spec = new PBEKeySpec(secretKey.toCharArray(), salt.getBytes(), ITERATION_COUNT, KEY_LENGTH);
-            SecretKey tmp = factory.generateSecret(spec);
-            SecretKeySpec secretKeySpec = new SecretKeySpec(tmp.getEncoded(), "AES");
-
-            Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
-            cipher.init(Cipher.ENCRYPT_MODE, secretKeySpec, ivspec);
-
-            byte[] cipherText = cipher.doFinal(strToEncrypt.getBytes("UTF-8"));
-            byte[] encryptedData = new byte[iv.length + cipherText.length];
-            System.arraycopy(iv, 0, encryptedData, 0, iv.length);
-            System.arraycopy(cipherText, 0, encryptedData, iv.length, cipherText.length);
-
-            return Base64.getEncoder().encodeToString(encryptedData);
-        } catch (Exception e) {
-            // Handle the exception properly
-            e.printStackTrace();
-            return null;
-        }
-    }
-    public static String encrypt(String strToEncrypt, String myKey) {
         try {
             MessageDigest sha = MessageDigest.getInstance("SHA-1");
-            byte[] key = myKey.getBytes("UTF-8");
+            byte[] key = secretKey.getBytes("UTF-8");
             key = sha.digest(key);
             key = Arrays.copyOf(key, 16);
             SecretKeySpec secretKey = new SecretKeySpec(key, "AES");
@@ -63,9 +63,9 @@ public class AESUtils {
         return null;
     }
 
-        public static void main(String[] args) {
-        System.err.println(encrypt("demo",secretKey));
-        System.err.println(encrypt("demo",secretKey));
-        System.err.println(encrypt("demo",secretKey));
+    public static void main(String[] args) {
+        System.err.println(encrypt("admin@123"));
+        System.err.println(encrypt("admin@123"));
+        System.err.println(encrypt("admin@123"));
     }
 }

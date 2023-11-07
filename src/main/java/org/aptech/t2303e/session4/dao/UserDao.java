@@ -6,4 +6,6 @@ public interface UserDao {
     // dao  : tương tác với dbs
     boolean validateUser(String username, String password);
     User getByUsername(String username);
+    Boolean insert(User u);
+    Boolean update(User u);
 }
