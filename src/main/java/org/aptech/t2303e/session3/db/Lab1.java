@@ -100,8 +100,8 @@ public class Lab1 {
         // 2 : prepaidStatementt
         try {
             preSt  = conn.prepareStatement(sql);
-            preSt.setString(1, "'"+username+"'");
-            preSt.setString(2,"'"+ password+"'");
+            preSt.setString(1, username);
+            preSt.setString(2,password);
             System.out.println(preSt);
             ResultSet rs = preSt.executeQuery();
             while (rs.next()){
@@ -119,12 +119,10 @@ public class Lab1 {
         }
         return result;
     }
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
         // sql injection
-//        boolean isOk  = validateUser1("Tao ko biet","Tao ko biet'\n" +
-//                "or 'Biet hay ko cung ok' = 'Biet hay ko cung ok");
-//        boolean isOk  = validateUser(null , null);
-        boolean isOk  = validateUser1("Demo1" , "Demo1");
+        boolean isOk  = validateUser1("Tao ko biet","Tao ko biet'\n" +
+                "or 'Biet hay ko cung ok' = 'Biet hay ko cung ok");
         System.err.println(isOk ? "Login success" : "Login failed");
     }
 }
