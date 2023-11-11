@@ -4,6 +4,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.aptech.t2303e.session3.db.Datasource;
 import org.aptech.t2303e.session3.db.User;
 import org.aptech.t2303e.session4.dao.UserDao;
+import org.aptech.t2303e.session4.service.UserService;
+import org.aptech.t2303e.session4.service.impl.UserServiceImpl;
 import org.aptech.t2303e.utils.encryptionutils.AESUtils;
 
 import java.sql.Connection;
@@ -116,16 +118,68 @@ public class UserDaoImpl implements UserDao {
         return false;
     }
 
+    @Override
+    public List<User> findAll(int limit, int offset) {
+        long startTime  = System.currentTimeMillis();
+        PreparedStatement preSt;
+        String sql  = "Select * from user_table order by id limit ? offset  ? ";
+        List<User> users = new ArrayList<>();
+        Connection conn = Datasource.getConn();
+        try {
+            preSt  = conn.prepareStatement(sql);
+            preSt.setInt(1, limit);
+            preSt.setInt(2, offset);
+            ResultSet rs = preSt.executeQuery();
+            while (rs.next()){
+                User u = rowMapper(rs);
+                if(!Objects.isNull(u)) users.add(u);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+        System.out.println("Process query find all , time executed : "+ (System.currentTimeMillis() - startTime) + " ms");
+        return users;
+    }
+
+    @Override
+    public Integer count(String sql) {
+        Connection connection = Datasource.getConn();
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            ResultSet rs = preparedStatement.executeQuery();
+            while (rs.next()){
+                return rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return null;
+    }
+
     public static void main(String[] args) {
-        UserDaoImpl obj = new UserDaoImpl();
-        boolean result = obj.insert(User.builder()
-                .username("john doe2")
-                .password(AESUtils.encrypt("admin@123"))
-                .createdAt(new Date())
-                .updatedAt(new Date())
-                .build()
-        );
-        if (result) System.err.println("insert success");
+        UserDao obj = new UserDaoImpl();
+        UserService userService = new UserServiceImpl();
+//        boolean result = obj.insert(User.builder()
+//                .username("john doe2")
+//                .password(AESUtils.encrypt("admin@123"))
+//                .createdAt(new Date())
+//                .updatedAt(new Date())
+//                .build()
+//        );
+//        if (result) System.err.println("insert success");
+        long startTime  = System.currentTimeMillis();
+        int count  = obj.count("Select count(*) from user_table;");
+        int limit  = 1000;
+        int num = count / limit ;
+        if(count % limit != 0) num++;
+        String fileName  = "./etc/user_table.txt";
+        for (int i = 0; i < num; i++) {
+            List<User> users = obj.findAll(limit, i * limit);
+            userService.insertFile(users,fileName);
+        }
+        System.out.println("Processing time  :"+(System.currentTimeMillis() - startTime)/1000 + " ms");
     }
 
     private  static User rowMapper(ResultSet rs){

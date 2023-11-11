@@ -17,4 +17,5 @@ public class User {
     private Date updatedAt;
     private String createdBy;
     private String updatedBy;
+
 }

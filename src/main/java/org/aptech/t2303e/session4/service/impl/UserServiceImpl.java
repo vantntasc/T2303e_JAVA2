@@ -8,6 +8,12 @@ import org.aptech.t2303e.session4.dao.impl.UserDaoImpl;
 import org.aptech.t2303e.session4.service.UserService;
 import org.aptech.t2303e.utils.encryptionutils.AESUtils;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.List;
+
 public class UserServiceImpl implements UserService {
     private static final int MAX_LOGIN_FAIL = 5;
     UserDao userRepo  = new UserDaoImpl();
@@ -38,6 +44,28 @@ public class UserServiceImpl implements UserService {
             userRepo.update(u);
         }
         return false;
+    }
+//    "./etc/demo1.txt"
+    @Override
+    public void insertFile(List<User> users, String fileName) {
+        try {
+            PrintWriter out  = new PrintWriter(new BufferedWriter(
+                    new FileWriter(fileName,true)
+            ));
+            for (User u : users) {
+                StringBuilder sb  = new StringBuilder();
+                sb.append(u.getUsername()).append("|")
+                        .append(u.getStatus()).append("|")
+                        .append(u.getCreatedAt()).append("|")
+                        .append(u.getCreatedBy()).append("|")
+                        .append(u.getUpdatedAt()).append("|")
+                        .append(u.getUpdatedBy());
+                out.println(sb.toString());
+            }
+            out.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public static void main(String[] args) {
