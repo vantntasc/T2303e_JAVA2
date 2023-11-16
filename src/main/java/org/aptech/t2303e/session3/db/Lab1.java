@@ -1,6 +1,7 @@
 package org.aptech.t2303e.session3.db;
 
 import org.apache.commons.lang3.StringUtils;
+import org.aptech.t2303e.connectionpool.HikariCPDataSource;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -23,9 +24,12 @@ public class Lab1 {
 //        return connection;
 //    }
     // get all user from db -> map to list user in program
-    public static List<User> getAllUsers() {
+public static void main(String[] args) throws SQLException {
+    System.err.println(getAllUsers());
+}
+    public static List<User> getAllUsers() throws SQLException {
         List<User> users = new ArrayList<>();
-        Connection conn = Datasource.getConn();
+        Connection conn = HikariCPDataSource.getConnection();
         // 1 : statementt
         try {
             String sql  = "Select * from user_table";
@@ -119,10 +123,10 @@ public class Lab1 {
         }
         return result;
     }
-    public static void main(String[] args) throws InterruptedException {
-        // sql injection
-        boolean isOk  = validateUser1("Tao ko biet","Tao ko biet'\n" +
-                "or 'Biet hay ko cung ok' = 'Biet hay ko cung ok");
-        System.err.println(isOk ? "Login success" : "Login failed");
-    }
+//    public static void main(String[] args) throws InterruptedException {
+//        // sql injection
+//        boolean isOk  = validateUser1("Tao ko biet","Tao ko biet'\n" +
+//                "or 'Biet hay ko cung ok' = 'Biet hay ko cung ok");
+//        System.err.println(isOk ? "Login success" : "Login failed");
+//    }
 }
