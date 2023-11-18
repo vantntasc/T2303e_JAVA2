@@ -36,7 +36,26 @@ public class QueuDemo {
             System.err.println("name :" + name);
         }
 
-
+        // không thể thêm data vào 1 queue đã đầy .
+        // không thể lấy data từ 1 cái queue bị rỗng .
+        // problem :
+        /*
+        1. nếu lấy ra hay thêm vào bộ đệm thất bại
+        -> khi nào chúng ta có thể biết là có thể thực hien lai
+        2. xử lý như thế nào trong môi trường đa luồng
+         */
+        // BlockingQueue
+        /*
+        1. Với consumer , nếu queue trống -> consumer rơi vào trạng thái
+           waiting ,lần đầu tiên sau đó mà producer them data
+           vao hàng đợi -> notify consumer dậy và thực hiện luồng lấy dữ liệu
+           ra như bt
+         2. Với producer , nếu queue đầy -> producer rơi vào trạng thái
+           waiting ,lần đầu tiên sau đó mà consumer lay data
+           ra khỏi hàng đợi -> notify producer dậy và thực hiện luồng đẩy  dữ liệu
+           vào hàng đợi như bt
+         3. đảm bảo luồng an toàn
+         */
 
 
     }
