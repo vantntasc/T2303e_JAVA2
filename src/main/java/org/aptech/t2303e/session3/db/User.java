@@ -14,6 +14,7 @@ import org.aptech.t2303e.json.Profile;
 
 import java.util.Date;
 import java.util.List;
+import java.util.stream.IntStream;
 
 @Data
 @Builder
@@ -34,4 +35,8 @@ public class User {
     private String createdBy;
     private String updatedBy;
     List<Profile> profiles;
+
+    public static void main(String[] args) {
+       IntStream.range(1,3).forEach(System.err::println);
+    }
 }
