@@ -5,6 +5,7 @@ import org.aptech.t2303e.entity.client.PostOffice;
 import org.aptech.t2303e.entity.client.VPExpService;
 import org.aptech.t2303e.entity.client.VPLoginRes;
 import org.aptech.t2303e.entity.consts.VPServiceType;
+import org.aptech.t2303e.process.CallableWorker;
 import org.aptech.t2303e.service.VPService;
 import org.aptech.t2303e.service.client.VPServiceClient;
 import org.aptech.t2303e.service.client.impl.VPServiceClientImpl;
@@ -12,6 +13,7 @@ import org.aptech.t2303e.service.client.impl.VPServiceClientImpl;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
+import java.util.concurrent.*;
 import java.util.stream.Collectors;
 
 public class VPServiceImpl implements VPService {
@@ -39,9 +41,33 @@ public class VPServiceImpl implements VPService {
     @Override
     public List<VPExpService> getListVPExpService() {
         // call api follow to service
-        EnumSet.allOf(VPServiceType.class).stream().forEach(item  -> {
-
-        });
+        long start = System.currentTimeMillis();
+        // single thread
+//        EnumSet.allOf(VPServiceType.class).stream().forEach(item  -> {
+//            List<VPExpService> vpExpServices = serviceClient.getListService(item.type);
+//        });
+//        System.err.println("Call api in  " + (System.currentTimeMillis() - start) + " ms");
+        // multi thread
+        List<Future<List<VPExpService>>> fututeResults = new ArrayList<>();
+        ExecutorService executor = Executors.newFixedThreadPool(5);
+        Callable<List<VPExpService>> callable;
+        Future<List<VPExpService>> future;
+        for(VPServiceType item : VPServiceType.values()){
+            callable = new CallableWorker(item.type, serviceClient);
+            future = executor.submit(callable);
+            fututeResults.add(future);
+        }
+        List<VPExpService> vpExpServices = new ArrayList<>();
+        for(Future<List<VPExpService>> f : fututeResults){
+            try {
+                List<VPExpService>   vpe = f.get();
+                vpExpServices.addAll(vpe);
+            } catch (InterruptedException |ExecutionException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        System.err.println(vpExpServices);
+        System.err.println("Call api in  " + (System.currentTimeMillis() - start) + " ms");
         return null;
     }
     // getListService

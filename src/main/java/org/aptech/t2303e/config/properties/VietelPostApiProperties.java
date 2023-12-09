@@ -13,6 +13,8 @@ public class VietelPostApiProperties {
     private String loginUrl;
     @Value("api.path.viettel-post.get-list-post-office")
     private String getPostOfficeUrl;
+    @Value("api.path.viettel-post.get-list-service")
+    private String getListServiceUrl;
     @Value("api.path.viettel-post.username")
     private String username;
     @Value("api.path.viettel-post.password")

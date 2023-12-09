@@ -3,10 +3,9 @@ package org.aptech.t2303e.service.client.impl;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.aptech.t2303e.config.properties.VietelPostApiProperties;
-import org.aptech.t2303e.entity.client.PostOffice;
-import org.aptech.t2303e.entity.client.PostOfficeResWrapper;
-import org.aptech.t2303e.entity.client.VPLoginReq;
-import org.aptech.t2303e.entity.client.VPLoginRes;
+import org.aptech.t2303e.entity.VPExpServiceWrapper;
+import org.aptech.t2303e.entity.VpExServiceReq;
+import org.aptech.t2303e.entity.client.*;
 import org.aptech.t2303e.service.client.VPServiceClient;
 import org.aptech.t2303e.utils.ConfigurationUtils;
 import org.aptech.t2303e.utils.RestUtils;
@@ -53,6 +52,21 @@ public class VPServiceClientImpl  implements VPServiceClient {
         PostOfficeResWrapper postOfficeResWrapper = (PostOfficeResWrapper) response.getBody();
         if (postOfficeResWrapper != null) {
             return postOfficeResWrapper.getPostOffices();
+        }
+        return null;
+    }
+
+    @Override
+    public List<VPExpService> getListService(int type) {
+        String url  = apiProps.getBaseUrl() + apiProps.getGetListServiceUrl();
+        // set body
+        VpExServiceReq request = VpExServiceReq.builder()
+                .type(type)
+                .build();
+        ResponseEntity<?> response = restUtils.send(url, HttpMethod.POST, request,VPExpServiceWrapper.class);
+        VPExpServiceWrapper vpExpServiceWrapper = (VPExpServiceWrapper) response.getBody();
+        if (vpExpServiceWrapper != null) {
+            return vpExpServiceWrapper.getVpExpServices();
         }
         return null;
     }
